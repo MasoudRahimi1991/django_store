@@ -5,10 +5,7 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout
 
 def register_view(request):
-    """
-    ثبت‌نام کاربر جدید با فرم آماده‌ی Django.
-    بعد از ثبت موفق، کاربر را لاگین می‌کنیم و می‌فرستیم به صفحه‌ی اصلی.
-    """
+
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
