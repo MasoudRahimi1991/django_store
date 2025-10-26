@@ -32,7 +32,3 @@ def account_favorites(request):
 
 
 
-# @login_required
-# def account_settings(request):
-#     profile = UserProfile.objects.filter(user=request.user).first()
-#     return render(request, 'user/account_settings.html', {'profile': profile})
