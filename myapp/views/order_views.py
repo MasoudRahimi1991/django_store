@@ -6,7 +6,7 @@ from django.db.models import Sum
 from ..models import Order
 
 
-# 🧾 نمایش تاریخچه سفارش‌ها
+
 @login_required
 def order_history_view(request):
     """نمایش تاریخچه سفارش‌های کاربر"""
@@ -14,16 +14,16 @@ def order_history_view(request):
     return render(request, 'user/order_history.html', {'orders': orders})
 
 
-# 🗑 حذف سفارش
+
 @login_required
 def order_delete_view(request, order_id):
-    """حذف یک سفارش"""
+  
     order = get_object_or_404(Order, id=order_id, user=request.user)
     order.delete()
     return redirect('order_history')
 
 
-# 🔄 ویرایش تعداد سفارش
+ر
 @login_required
 def order_update_view(request, order_id):
     """تغییر تعداد سفارش و به‌روزرسانی مبلغ"""
@@ -36,22 +36,19 @@ def order_update_view(request, order_id):
                 order.total_price = order.product.price * quantity
                 order.save()
         except (ValueError, TypeError):
-            pass  # در صورت ارسال داده نامعتبر، کاری انجام نده
+            pass  
     return redirect('order_history')
-# ------------------------------
-# نمایش جزئیات یک سفارش خاص
-# ------------------------------
+
 @login_required
 def order_detail_view(request, order_id):
-    """نمایش جزئیات یک سفارش خاص"""
+    
     order = get_object_or_404(Order, id=order_id, user=request.user)
     return render(request, 'user/order_detail.html', {'order': order})
 
 
-# 💳 صفحه پرداخت (Payment Summary)
 @login_required
 def payment_view(request):
-    """نمایش جمع کل سفارش‌های در انتظار پرداخت"""
+  
     orders = Order.objects.filter(user=request.user, status='pending')
     total_amount = sum(order.total_price for order in orders)
 
@@ -62,7 +59,7 @@ def payment_view(request):
     return render(request, 'user/payment.html', context)
 
 
-# ✅ پردازش پرداخت
+
 @csrf_exempt
 @login_required
 def process_payment_view(request):
@@ -77,10 +74,10 @@ def process_payment_view(request):
     return redirect('payment')
 
 
-# ❌ لغو سفارش
+
 @login_required
 def order_cancel_view(request, order_id):
-    """لغو سفارش فقط در وضعیت pending"""
+   
     order = get_object_or_404(Order, id=order_id, user=request.user)
     if order.status == 'pending':
         order.status = 'cancelled'
