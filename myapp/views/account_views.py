@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .order_views import order_history_view  # فقط اگر خواستی از ویوهای موجود استفاده کنی
-from myapp.models import Order, UserProfile ,Favorite # در صورت نیاز برای داده‌های واقعی
+from .order_views import order_history_view  
+from myapp.models import Order, UserProfile ,Favorite 
 
 @login_required
 def account_dashboard(request):
