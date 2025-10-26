@@ -4,13 +4,7 @@ A complete **E-Commerce website** built with **Django**, featuring a clean UI, f
 
 ---
 
-## 🇩🇪 Django Shop Projekt
-
-Ein vollständiges **E-Commerce-Projekt** auf Basis von **Django**, das sowohl im Backend als auch im Frontend professionell umgesetzt wurde.
-
----
-
-## ✨ Key Features / Hauptfunktionen
+## ✨ Key Features
 
 ### 👤 User Account
 - **Profile:** View and edit username, e-mail, phone, and address.  
