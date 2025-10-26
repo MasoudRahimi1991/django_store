@@ -7,7 +7,7 @@ from .models import Category, Product, ProductImage, UserProfile, Order, Cart, C
 # ========================
 class ProductImageInline(admin.TabularInline):
     model = ProductImage
-    extra = 1  # تعداد فرم خالی برای آپلود عکس جدید
+    extra = 1  
 
 
 # ========================
@@ -31,7 +31,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ('category', 'is_enabled')
     search_fields = ('name', 'category__name')
     ordering = ('-created_at',)
-    inlines = [ProductImageInline]  # 👈 اضافه کردن عکس‌های محصول در همان فرم
+    inlines = [ProductImageInline]
 
 
 # ========================
@@ -59,8 +59,7 @@ class OrderAdmin(admin.ModelAdmin):
     list_filter = ('status', 'order_date')
     search_fields = ('user__username', 'product__name')
     ordering = ('-order_date',)
-    list_editable = ('status',)  # 👈 حالا می‌تونی از پنل Admin وضعیت رو تغییر بدی (مثلاً Paid → Shipped)
-
+    list_editable = ('status',) 
 
 # ========================
 # Cart Admin
