@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Profile - Shop{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <!-- 🔹 عنوان صفحه -->
+    <div class="text-center mb-4">
+        <h2 class="fw-bold text-primary">Edit Your Profile</h2>
+        <p class="text-muted">Update your account and profile information below.</p>
+        <hr class="w-25 mx-auto">
+    </div>
+
+    <!-- 🔹 فرم‌ها داخل کارت -->
+    <div class="card shadow-sm border-0 mx-auto" style="max-width: 700px;">
+        <div class="card-body p-4">
+
+            <form method="post" novalidate>
+                {% csrf_token %}
+
+                <!-- 🧩 Account Info -->
+                <h5 class="fw-bold text-secondary mb-3">Account Information</h5>
+                <div class="border rounded-3 p-3 mb-4 bg-light">
+                    {{ user_form.non_field_errors }}
+                    {% for field in user_form %}
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="text-danger small">{{ field.errors|join:", " }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!-- 🧩 Profile Info -->
+                <h5 class="fw-bold text-secondary mb-3">Profile Information</h5>
+                <div class="border rounded-3 p-3 mb-4 bg-light">
+                    {{ profile_form.non_field_errors }}
+                    {% for field in profile_form %}
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="text-danger small">{{ field.errors|join:", " }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!-- 🧭 دکمه‌ها -->
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{% url 'account_profile' %}" class="btn btn-outline-secondary">
+                        ← Back to Profile
+                    </a>
+                    <button type="submit" class="btn btn-primary px-4">
+                        💾 Save Changes
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+

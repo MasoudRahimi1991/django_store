@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile - Shop{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <!-- 🔹 عنوان صفحه -->
+    <div class="text-center mb-4">
+        <h2 class="fw-bold text-primary">Your Profile</h2>
+        <p class="text-muted">Manage your personal information below.</p>
+        <hr class="w-25 mx-auto">
+    </div>
+
+    <!-- 🔹 کارت پروفایل -->
+    <div class="card shadow-sm border-0 mx-auto" style="max-width: 500px;">
+        <div class="card-body text-center py-4">
+
+            <!-- آواتار -->
+            <div class="mb-3">
+                <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" 
+                     alt="User avatar" width="100" height="100" class="rounded-circle shadow-sm">
+            </div>
+
+            <h5 class="fw-bold text-dark mb-3">{{ request.user.username }}</h5>
+
+            <ul class="list-group list-group-flush text-start">
+                <li class="list-group-item">
+                    <strong>Email:</strong> {{ request.user.email }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Phone:</strong> {{ profile.phone|default:"-" }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Address:</strong> {{ profile.address|default:"-" }}
+                </li>
+            </ul>
+
+            <!-- 🎨 دکمه‌ها با استایل جدید -->
+            <style>
+                .btn-gradient {
+                    background: linear-gradient(135deg, #007bff, #00c6ff);
+                    color: white !important;
+                    border: none;
+                    transition: all 0.3s ease-in-out;
+                    box-shadow: 0 2px 6px rgba(0, 123, 255, 0.3);
+                }
+                .btn-gradient:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
+                }
+                .btn-gradient:active {
+                    transform: scale(0.97);
+                }
+            </style>
+
+            <div class="mt-4 d-flex justify-content-center gap-3">
+                <a href="{% url 'edit_profile' %}" class="btn btn-gradient px-4">
+                    ✏️ Edit Profile
+                </a>
+                <a href="{% url 'order_history' %}" class="btn btn-outline-primary px-4">
+                    🧾 Order History
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+
+

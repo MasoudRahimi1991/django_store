@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Order #{{ order.id }}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="card shadow-sm border-0 p-4">
+    <h3 class="fw-bold text-primary mb-3">🧾 Order #{{ order.id }}</h3>
+
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item"><strong>Product:</strong> {{ order.product.name }}</li>
+      <li class="list-group-item"><strong>Quantity:</strong> {{ order.quantity }}</li>
+      <li class="list-group-item"><strong>Total Price:</strong> €{{ order.total_price }}</li>
+      <li class="list-group-item"><strong>Status:</strong> {{ order.status|title }}</li>
+      <li class="list-group-item"><strong>Date:</strong> {{ order.order_date|date:"Y-m-d H:i" }}</li>
+    </ul>
+
+    <div class="text-center mt-3">
+      <a href="{% url 'account_orders' %}" class="btn btn-outline-secondary">← Back to Orders</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

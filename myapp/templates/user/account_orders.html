@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% block title %}My Orders{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+  <!-- 🔹 Header -->
+  <div class="text-center mb-5">
+    <h2 class="fw-bold text-primary">📦 My Orders</h2>
+    <p class="text-muted">Here you can find all your placed orders.</p>
+    <hr class="w-25 mx-auto">
+  </div>
+
+  {% if orders %}
+    <div class="row g-4 justify-content-center">
+      {% for order in orders %}
+        <div class="col-md-4 col-lg-3 col-sm-6">
+          <div class="card order-card border-0 shadow-sm">
+
+            <!-- 🔹 Product Image -->
+            <div class="position-relative">
+              {% if order.product.main_image %}
+                <img src="{{ order.product.main_image.url }}" alt="{{ order.product.name }}"
+                     class="order-image rounded-top">
+              {% else %}
+                <img src="https://via.placeholder.com/300x200?text=No+Image" class="order-image rounded-top">
+              {% endif %}
+
+              <!-- 🔹 Status Badge -->
+              {% if order.status == 'pending' %}
+                <span class="badge bg-warning text-dark status-badge">Pending</span>
+              {% elif order.status == 'paid' %}
+                <span class="badge bg-success status-badge">Paid</span>
+              {% elif order.status == 'cancelled' %}
+                <span class="badge bg-danger status-badge">Cancelled</span>
+              {% elif order.status == 'delivered' %}
+                <span class="badge bg-primary status-badge">Delivered</span>
+              {% else %}
+                <span class="badge bg-secondary status-badge">Unknown</span>
+              {% endif %}
+            </div>
+
+            <!-- 🔹 Card Body -->
+            <div class="card-body text-center">
+              <h6 class="fw-bold text-dark mb-1">{{ order.product.name }}</h6>
+              <p class="text-success fw-semibold mb-1">€{{ order.total_price }}</p>
+              <p class="text-muted small mb-2">🕒 {{ order.order_date|date:"Y-m-d H:i" }}</p>
+
+              <!-- 🔹 Actions -->
+              <div class="d-flex justify-content-center gap-2 mt-2">
+                <a href="{% url 'order_detail' order.id %}" class="btn btn-sm btn-outline-primary">View</a>
+
+                {% if order.status == 'pending' %}
+                  <a href="{% url 'order_cancel' order.id %}" 
+                     class="btn btn-sm btn-outline-danger"
+                     onclick="return confirm('Are you sure you want to cancel this order?');">
+                     Cancel
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="text-center py-5">
+      <img src="https://cdn-icons-png.flaticon.com/512/4076/4076549.png" width="100" class="mb-3">
+      <h5 class="text-muted">You don’t have any orders yet.</h5>
+      <a href="{% url 'home' %}" class="btn btn-primary mt-2">🛒 Go Shopping</a>
+    </div>
+  {% endif %}
+</div>
+
+<!-- ✨ CSS -->
+<style>
+  .order-card {
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform .25s ease, box-shadow .25s ease;
+    background-color: #fff;
+  }
+
+  .order-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+  }
+
+  /* ✅ نسخه اصلاح‌شده برای نمایش کامل عکس */
+  .order-image {
+    width: 100%;
+    height: 200px; /* کمی بزرگ‌تر شد تا تصویر کامل دیده شود */
+    object-fit: contain; /* قبلاً cover بود، حالا contain شد */
+    background-color: #f8f9fa;
+    padding: 10px; /* فضای خالی اطراف تصویر */
+  }
+
+  .status-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: .8rem;
+    padding: .4em .7em;
+    border-radius: 10px;
+  }
+
+  @media (max-width: 576px) {
+    .order-image {
+      height: 160px;
+    }
+  }
+</style>
+
+{% endblock %}
+
+
+

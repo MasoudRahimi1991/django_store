@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}My Favorites{% endblock %}
+
+{% block content %}
+<h2>❤️ My Favorites</h2>
+
+{% if favorites %}
+    <ul style="list-style:none; padding-left:0;">
+        {% for fav in favorites %}
+            <li style="border-bottom:1px solid #eee; margin-bottom:8px; padding:8px;">
+                <a href="{% url 'product_detail' fav.product.id %}">
+                    <strong>{{ fav.product.name }}</strong>
+                </a>
+                <p>{{ fav.product.price }} €</p>
+
+                {% if fav.product.main_image %}
+                    <img src="{{ fav.product.main_image.url }}" alt="{{ fav.product.name }}" width="120">
+                {% endif %}
+
+                <form action="{% url 'toggle_favorite' fav.product.id %}" method="post" style="margin-top:5px;">
+                    {% csrf_token %}
+                    <button type="submit">💔 Remove</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>You don't have any favorite products yet.</p>
+{% endif %}
+{% endblock %}
+

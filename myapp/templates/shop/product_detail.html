@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+{% block title %}{{ product.name }} - Details{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+  <!-- 🔹 دکمه Back to Home بالا -->
+  <div class="mb-3">
+    <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-sm">
+      ← Back to Home
+    </a>
+  </div>
+
+  <!-- 🧩 کارت محصول -->
+  <div class="card shadow-lg border-0 p-4">
+    <div class="row g-4 align-items-start">
+
+      <!-- 🖼 تصویر اصلی + گالری -->
+      <div class="col-lg-6 text-center">
+        {% if product.main_image %}
+          <a href="#" data-bs-toggle="modal" data-bs-target="#imageModal" class="d-block">
+            <img id="mainImage" src="{{ product.main_image.url }}" alt="{{ product.name }}" class="img-fluid main-product-image">
+          </a>
+        {% else %}
+          <img id="mainImage" src="https://via.placeholder.com/600x450?text=No+Image" class="img-fluid main-product-image" alt="No image">
+        {% endif %}
+
+        {% if images %}
+          <div class="gallery-container d-flex flex-wrap justify-content-center mt-3">
+            {% for image in images %}
+              <img src="{{ image.image.url }}" data-full="{{ image.image.url }}" alt="{{ product.name }}" class="gallery-thumb rounded shadow-sm">
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- ℹ️ اطلاعات محصول -->
+      <div class="col-lg-6">
+        <h2 class="fw-bold text-primary mb-1">{{ product.name }}</h2>
+
+        <!-- ⭐ میانگین امتیاز -->
+        <div class="d-flex align-items-center mb-2">
+          <div>
+            {% for i in "12345" %}
+              {% if forloop.counter <= avg_rating %}
+                <span class="text-warning fs-5">★</span>
+              {% else %}
+                <span class="text-muted fs-5">☆</span>
+              {% endif %}
+            {% endfor %}
+          </div>
+          <small class="text-muted ms-2">
+            {% if review_count %}({{ review_count }} review{% if review_count > 1 %}s{% endif %}){% else %}(No rating yet){% endif %}
+          </small>
+        </div>
+
+        <p class="fs-4 fw-bold text-success mb-2">{{ product.price }} €</p>
+        <p class="text-muted">{{ product.description|default:"No description available." }}</p>
+
+        <!-- 🛒 افزودن به سبد خرید -->
+        <form method="post" action="{% url 'add_to_cart' product.id %}" class="d-flex align-items-center gap-2 my-3">
+          {% csrf_token %}
+          <input type="number" name="quantity" value="1" min="1" class="form-control w-auto text-center">
+          <button type="submit" class="btn btn-primary flex-grow-1">🛒 Add to Cart</button>
+        </form>
+
+        <!-- ❤️ علاقه‌مندی -->
+        {% if user.is_authenticated %}
+          <form action="{% url 'toggle_favorite' product.id %}" method="post">
+            {% csrf_token %}
+            {% if user_favorited %}
+              <button type="submit" class="btn btn-outline-danger w-100">💔 Remove from Favorites</button>
+            {% else %}
+              <button type="submit" class="btn btn-outline-danger w-100">❤️ Add to Favorites</button>
+            {% endif %}
+          </form>
+        {% else %}
+          <p class="mt-3">
+            <a class="text-decoration-none" href="{% url 'login' %}?next={% url 'product_detail' product.id %}">Login</a>
+            to add this product to favorites.
+          </p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- 💬 Customer Reviews -->
+  <div class="card border-0 shadow-sm mt-5 p-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4 class="fw-bold mb-0">Customer Reviews</h4>
+
+      {% if user.is_authenticated %}
+      <!-- دکمه باز کردن فرم Review -->
+      <button class="btn btn-outline-success btn-sm" type="button"
+              data-bs-toggle="collapse" data-bs-target="#reviewForm"
+              aria-expanded="false" aria-controls="reviewForm">
+        📝 Write a Review
+      </button>
+      {% endif %}
+    </div>
+
+    {% if product.reviews.all %}
+      {% for review in product.reviews.all %}
+        <div class="border-bottom pb-2 mb-3">
+          <strong>{{ review.user.username }}</strong>
+          <span class="text-warning">⭐ {{ review.rating }}/5</span>
+          <p class="mb-1">{{ review.comment|default:"No comment provided." }}</p>
+          <small class="text-muted">{{ review.created_at|date:"Y-m-d H:i" }}</small>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="text-muted">No reviews yet. Be the first to review!</p>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+      <!-- فرم جمع‌شونده -->
+      <div class="collapse mt-3" id="reviewForm">
+        <div class="card card-body border-0 bg-light">
+          <form action="{% url 'add_review' product.id %}" method="post">
+            {% csrf_token %}
+            <div class="d-flex align-items-center mb-2">
+              <label class="me-2 fw-semibold">Rating:</label>
+              <input type="number" name="rating" min="1" max="5" value="5" class="form-control w-auto text-center">
+            </div>
+            <textarea name="comment" rows="3" class="form-control mb-3" placeholder="Write your review..."></textarea>
+            <button type="submit" class="btn btn-success">Submit Review</button>
+          </form>
+        </div>
+      </div>
+    {% else %}
+      <p><a href="{% url 'login' %}">Login</a> to write a review.</p>
+    {% endif %}
+  </div>
+</div>
+
+<!-- 🔍 Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content bg-transparent border-0">
+      <img id="modalImage" src="{% if product.main_image %}{{ product.main_image.url }}{% endif %}"
+           class="img-fluid rounded shadow-lg" alt="{{ product.name }}">
+    </div>
+  </div>
+</div>
+
+<!-- 🎨 CSS -->
+<style>
+  .main-product-image {
+    width: 100%;
+    max-height: 460px;
+    object-fit: contain;
+    background: #f8f9fa;
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+  }
+  .main-product-image:hover { transform: scale(1.02); }
+  .gallery-thumb {
+    width: 90px; height: 90px; object-fit: cover;
+    margin: 6px; cursor: pointer; transition: .25s;
+    border: 2px solid transparent;
+  }
+  .gallery-thumb:hover { transform: scale(1.06); border-color: #0d6efd; }
+</style>
+
+<!-- ⚡ JS -->
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  const mainImg  = document.getElementById('mainImage');
+  const modalImg = document.getElementById('modalImage');
+  document.querySelectorAll('.gallery-thumb').forEach(thumb => {
+    thumb.addEventListener('click', function(){
+      const full = this.dataset.full || this.src;
+      mainImg.src  = full;
+      modalImg.src = full;
+      mainImg.scrollIntoView({ behavior:'smooth', block:'center' });
+    });
+  });
+  if (mainImg && modalImg){
+    mainImg.closest('a')?.addEventListener('click', function(){
+      modalImg.src = mainImg.src;
+    });
+  }
+});
+</script>
+{% endblock %}
+
+
+
+
+
+

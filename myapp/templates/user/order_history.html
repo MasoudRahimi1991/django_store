@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}Order History{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+  <!-- 🔹 Header -->
+  <div class="text-center mb-4">
+    <h2 class="fw-bold text-primary">📦 Your Orders</h2>
+    <p class="text-muted mb-0">Track and manage all your past and current orders here.</p>
+    <hr class="w-25 mx-auto mt-3">
+  </div>
+
+  {% if orders %}
+  <div class="d-flex justify-content-end mb-3">
+    <a href="{% url 'payment' %}" class="btn btn-gradient">
+      💳 Proceed to Payment
+    </a>
+  </div>
+
+  <!-- جدول سفارشات -->
+  <div class="table-responsive shadow-sm rounded">
+    <table class="table table-bordered align-middle mb-4">
+      <thead class="table-light text-center">
+        <tr>
+          <th>Product</th>
+          <th>Quantity</th>
+          <th>Total (€)</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+        <tr class="text-center">
+          <td class="fw-semibold">{{ order.product.name }}</td>
+          <td>{{ order.quantity }}</td>
+          <td class="text-success fw-bold">{{ order.total_price }}</td>
+          <td>{{ order.order_date|date:"Y-m-d H:i" }}</td>
+
+          <td>
+            {% if order.status == 'pending' %}
+              <span class="badge bg-warning text-dark">Pending</span>
+            {% elif order.status == 'paid' %}
+              <span class="badge bg-success">Paid</span>
+            {% elif order.status == 'shipped' %}
+              <span class="badge bg-info text-dark">Shipped</span>
+            {% elif order.status == 'delivered' %}
+              <span class="badge bg-primary">Delivered</span>
+            {% elif order.status == 'cancelled' %}
+              <span class="badge bg-danger">Cancelled</span>
+            {% endif %}
+          </td>
+
+          <td>
+            <div class="d-flex justify-content-center align-items-center gap-2 flex-wrap">
+
+              <!-- Delete -->
+              <form method="post" action="{% url 'order_delete' order.id %}" class="m-0">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-danger btn-sm">
+                  🗑 Delete
+                </button>
+              </form>
+
+              <!-- Cancel -->
+              {% if order.status == 'pending' %}
+                <a href="{% url 'order_cancel' order.id %}"
+                   class="btn btn-outline-warning btn-sm"
+                   onclick="return confirm('Are you sure you want to cancel this order?');">
+                   ❌ Cancel
+                </a>
+              {% endif %}
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% else %}
+  <div class="text-center py-5">
+    <p class="text-muted fs-5">You have no orders yet.</p>
+    <a href="{% url 'home' %}" class="btn btn-outline-primary mt-3">← Back to Shop</a>
+  </div>
+  {% endif %}
+</div>
+
+<!-- CSS -->
+<style>
+  .btn-gradient {
+    background: linear-gradient(45deg, #007bff, #00c6ff);
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+  }
+
+  .btn-gradient:hover {
+    transform: scale(1.03);
+    background: linear-gradient(45deg, #0069d9, #00a2ff);
+  }
+
+  .table {
+    border-radius: 12px;
+    overflow: hidden;
+  }
+</style>
+
+{% endblock %}
