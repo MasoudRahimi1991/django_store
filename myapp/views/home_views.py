@@ -14,7 +14,7 @@ class HomeView(ListView, BaseView):
       
         queryset = Product.objects.filter(is_enabled=True).prefetch_related('reviews')
 
-        # 🔍 فیلتر جستجو (در نام یا توضیح)
+        
         query = self.request.GET.get('q')
         if query:
             queryset = queryset.filter(
