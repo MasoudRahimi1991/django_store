@@ -16,7 +16,7 @@
   <div class="card shadow-lg border-0 p-4">
     <div class="row g-4 align-items-start">
 
-      <!-- 🖼 gallery -->
+     
       <div class="col-lg-6 text-center">
         {% if product.main_image %}
           <a href="#" data-bs-toggle="modal" data-bs-target="#imageModal" class="d-block">
@@ -58,7 +58,6 @@
         <p class="fs-4 fw-bold text-success mb-2">{{ product.price }} €</p>
         <p class="text-muted">{{ product.description|default:"No description available." }}</p>
 
-        <!-- 🛒 افزودن به سبد خرید -->
         <form method="post" action="{% url 'add_to_cart' product.id %}" class="d-flex align-items-center gap-2 my-3">
           {% csrf_token %}
           <input type="number" name="quantity" value="1" min="1" class="form-control w-auto text-center">
@@ -91,7 +90,7 @@
       <h4 class="fw-bold mb-0">Customer Reviews</h4>
 
       {% if user.is_authenticated %}
-      <!-- دکمه باز کردن فرم Review -->
+     
       <button class="btn btn-outline-success btn-sm" type="button"
               data-bs-toggle="collapse" data-bs-target="#reviewForm"
               aria-expanded="false" aria-controls="reviewForm">
