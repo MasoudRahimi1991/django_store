@@ -8,6 +8,6 @@ urlpatterns = [
     path('', include('myapp.urls')),
 ]
 
-# 👇 این بخش برای نمایش فایل‌های مدیا در حالت development
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
