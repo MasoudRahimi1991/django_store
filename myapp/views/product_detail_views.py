@@ -13,17 +13,17 @@ def product_detail_view(request, product_id):
     images = ProductImage.objects.filter(product=product)
     reviews = Review.objects.filter(product=product).order_by('-created_at')
 
-    # بررسی اینکه کاربر این محصول را در علاقه‌مندی‌ها دارد یا نه
+
     user_favorited = False
     if request.user.is_authenticated:
         user_favorited = Favorite.objects.filter(user=request.user, product=product).exists()
 
-    # محاسبه میانگین امتیاز و تعداد نظرات
+   
     review_stats = reviews.aggregate(avg_rating=Avg('rating'), review_count=Count('id'))
     avg_rating = review_stats['avg_rating'] or 0
     review_count = review_stats['review_count'] or 0
 
-    # گرد کردن میانگین به عدد صحیح برای نمایش ستاره‌ها
+  
     avg_rating_rounded = int(round(avg_rating))
 
     context = {
@@ -31,8 +31,8 @@ def product_detail_view(request, product_id):
         'images': images,
         'reviews': reviews,
         'user_favorited': user_favorited,
-        'avg_rating': avg_rating_rounded,   # ⭐ برای نمایش ستاره‌های پر
-        'review_count': review_count,       # 📊 برای نمایش تعداد نظرات
+        'avg_rating': avg_rating_rounded,   
+        'review_count': review_count,       
     }
     return render(request, 'shop/product_detail.html', context)
 
