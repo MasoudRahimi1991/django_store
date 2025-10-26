@@ -52,7 +52,7 @@ def checkout_view(request):
     items = cart.items.all()
 
     if not items:
-        # اگر سبد خرید خالی بود
+     
         return redirect('view_cart')
 
     for item in items:
@@ -64,7 +64,7 @@ def checkout_view(request):
             order_date=timezone.now()
         )
 
-    # بعد از انتقال سفارش‌ها، سبد خرید خالی می‌شود
+
     cart.items.all().delete()
 
     return redirect('order_history')
