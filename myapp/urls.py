@@ -27,7 +27,7 @@ from .views.cart_views import (
     remove_item_view,
     checkout_view
 )
-from .views import account_views  # ✅ جدید برای مسیرهای بخش Account
+from .views import account_views  
 # from .views.account_views import account_dashboard_view
 
 
