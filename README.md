@@ -1,3 +1,7 @@
+## 🎬 Demo Video
+
+Watch the live demo of the Django E-Commerce Project here:  
+▶️ [Click to watch on GitHub Releases](https://github.com/MasoudRahimi1991/django_shop/releases/tag/v1.0)
 
 
 # 🛍️ Django Shop Project
